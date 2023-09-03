@@ -1,0 +1,15 @@
+01 - Problem:
+  sudo cat /var/log/postgresql/postgresql-14-main.log
+  FATAL:  terminating connection due to administrator command
+
+  It was an ubuntu auto update.
+    cat /var/log/apt/history.log
+      Start-Date: 2023-08-19  06:41:26
+      Commandline: /usr/bin/unattended-upgrade
+      Upgrade: postgresql-14:amd64 (14.8-0ubuntu0.22.04.1, 14.9-0ubuntu0.22.04.1)
+      End-Date: 2023-08-19  06:41:30
+
+      Start-Date: 2023-08-19  06:41:38
+      Commandline: /usr/bin/unattended-upgrade
+      Upgrade: postgresql-client-14:amd64 (14.8-0ubuntu0.22.04.1, 14.9-0ubuntu0.22.04.1)
+      End-Date: 2023-08-19  06:41:39

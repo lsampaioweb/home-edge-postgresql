@@ -1,0 +1,84 @@
+01 - Prepare the disk that will contain the databases.
+  Create the partition
+    sudo gdisk /dev/sdb
+
+  Create a Physical Volume (PV)
+    sudo pvcreate /dev/sdb1
+      Se der erro:
+      sudo wipefs -a /dev/sdb1
+
+  Create a Volume Group (VG)
+    sudo vgcreate pgdata-vg /dev/sdb1
+
+  Create a Logical Volume Management (LVM)
+    sudo lvcreate -n pgdata-lv -l 100%FREE pgdata-vg
+
+  Create a filesystem on the LV.
+    sudo mkfs.ext4 /dev/pgdata-vg/pgdata-lv
+
+  Create the folder
+    sudo mkdir /var/lib/postgresql
+
+  Mount the LVM even after reboots
+    sudo nano /etc/fstab
+    # <file system> <mount point> <type> <options> <dump>  <pass>
+    /dev/pgdata-vg/pgdata-lv /var/lib/postgresql ext4 defaults,noatime 0 2
+
+  Test:
+    sudo mount -a
+    or
+    sudo mount /dev/pgdata-vg/pgdata-lv /var/lib/postgresql
+
+02 - Installing PostgreSQL
+  * Change hostname.
+  * It is important to set the domain name.
+  sudo hostnamectl set-hostname edge-postgresql-01.homelab
+
+  sudo nano /etc/hosts
+  127.0.1.1 edge-postgresql-01
+
+  * postgresql-contrib package adds some additional utilities and functionality.
+  sudo apt update &&
+  sudo apt install -y postgresql postgresql-contrib
+
+03 - Check connection information
+  sudo -i -u postgres psql
+  \conninfo
+    # Message: You are connected to database "postgres" as user "postgres" via socket in "/var/run/postgresql" at port "5432".
+  \q
+
+04 - Update PostgreSQL admin user's password
+  The postgresql database admin user is created with the installation of PostgreSQL database server. We need to set a secure password for this user.
+
+  sudo -u postgres psql
+  postgres=# \password postgres
+    Enter new password: Keychain: "edge-postgres-01-root-user"
+  postgres=# \q
+  exit
+
+05 - Allow remote access
+  sudo nano /etc/postgresql/14/main/postgresql.conf
+
+  Look for this line in the file:
+  #listen_addresses = 'localhost'
+
+  Uncomment, and change the value to '0.0.0.0', this will allow Postgres connections from anyone.
+  listen_addresses = '0.0.0.0'
+
+  sudo nano /etc/postgresql/14/main/pg_hba.conf
+  
+  # IPv4 local connections:
+  host    all             all             127.0.0.1/32            scram-sha-256
+  host    all             all             192.168.5.0/28          scram-sha-256
+
+  Comment all IPV6 lines.
+
+  Restart Postgres to apply all the changes you have made to its configuration by running:
+  sudo systemctl restart postgresql
+
+  Chech the logs.
+  cat /var/log/postgresql/postgresql-14-main.log
+
+06 - Allow the port (5432) in the UFW
+  cat /etc/services | grep postgresql
+  sudo ufw allow from 192.168.5.0/28 to any port postgresql comment "Servers on the same network can connect to PostgreSQL"

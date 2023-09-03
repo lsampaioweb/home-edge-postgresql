@@ -1,0 +1,2 @@
+Backup:
+  pg_dump -h edge-postgresql-01.homelab -U zabbix -d zabbix > zabbix_dump.sql

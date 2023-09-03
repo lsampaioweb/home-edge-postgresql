@@ -1,0 +1,7 @@
+sudo apt --purge remove postgresql postgresql-14 postgresql-client-common postgresql-common postgresql-contrib && sudo apt autoremove -y
+
+sudo deluser postgres
+
+sudo rm -rf /etc/postgresql/ &&
+sudo rm -rf /var/log/postgresql/ && 
+sudo rm -rf /var/lib/postgresql/*

@@ -1,0 +1,14 @@
+01 - How To Install PostgreSQL on Ubuntu 22.04 [Quickstart]
+  https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-22-04-quickstart
+
+02 - How to Install and Set up PostgreSQL Database on Ubuntu 22.04
+  https://linuxhint.com/install-and-setup-postgresql-database-ubuntu-22-04/
+
+03 - Install PostgreSQL Database Server on Ubuntu 22.04|20.04
+  https://computingforgeeks.com/installing-postgresql-database-server-on-ubuntu/
+
+04 - How to Change PostgreSQL Data Directory to a separate Hard Drive on Ubuntu 18.04
+  https://medium.com/@seehleung/how-to-change-postgresql-data-directory-to-a-separate-hard-drive-on-ubuntu-18-04-db2831eeeb9c
+
+05 - PostgreSQL by Zabbix agent 2
+  https://www.zabbix.com/integrations/postgresql#postgresql_agent2
