@@ -1,6 +1,12 @@
 01 - Prepare the disk that will contain the databases.
   Create the partition
     sudo gdisk /dev/sdb
+    n
+    enter
+    enter
+    enter
+    enter
+    w
 
   Create a Physical Volume (PV)
     sudo pvcreate /dev/sdb1
@@ -32,9 +38,11 @@
 02 - Installing PostgreSQL
   * Change hostname.
   * It is important to set the domain name.
+  sudo hostnamectl set-hostname edge-k3s-db-01.homelab
   sudo hostnamectl set-hostname edge-postgresql-01.homelab
 
   sudo nano /etc/hosts
+  127.0.1.1 edge-k3s-db-01
   127.0.1.1 edge-postgresql-01
 
   * postgresql-contrib package adds some additional utilities and functionality.
@@ -52,6 +60,7 @@
 
   sudo -u postgres psql
   postgres=# \password postgres
+    Enter new password: Keychain: "edge-k3s-db-01-root-user"
     Enter new password: Keychain: "edge-postgres-01-root-user"
   postgres=# \q
   exit
@@ -66,10 +75,12 @@
   listen_addresses = '0.0.0.0'
 
   sudo nano /etc/postgresql/14/main/pg_hba.conf
-  
+
   # IPv4 local connections:
-  host    all             all             127.0.0.1/32            scram-sha-256
-  host    all             all             192.168.5.0/28          scram-sha-256
+  host    replication     all             127.0.0.1/32            scram-sha-256
+  host    all             all             192.168.2.0/24          scram-sha-256
+  host    all             all             192.168.10.0/28         scram-sha-256
+  #host    all             all             192.168.5.0/28          scram-sha-256
 
   Comment all IPV6 lines.
 
@@ -81,4 +92,5 @@
 
 06 - Allow the port (5432) in the UFW
   cat /etc/services | grep postgresql
+  sudo ufw allow from 192.168.10.0/28 to any port postgresql comment "Servers on the same network can connect to PostgreSQL"
   sudo ufw allow from 192.168.5.0/28 to any port postgresql comment "Servers on the same network can connect to PostgreSQL"
