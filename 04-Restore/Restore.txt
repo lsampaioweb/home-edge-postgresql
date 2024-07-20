@@ -1,6 +1,6 @@
 Copy the file to the server.
-  rsync -avh -e ssh zabbix_dump.sql lsampaio-postgresql-team@edge-postgresql-01.homelab:~/backup
+  rsync -avh -e ssh zabbix_dump.sql lsampaio-postgresql-team@edge-postgresql-01.lan.homelab:~/backup
 
 Restore the file.
-  psql -h edge-postgresql-01.homelab -U zabbix -d zabbix --password -f zabbix_dump.sql
-  psql -h edge-postgresql-01.homelab -U zabbix -d zabbix -f zabbix_dump.sql
+  psql -h edge-postgresql-01.lan.homelab -U zabbix -d zabbix --password -f zabbix_dump.sql
+  psql -h edge-postgresql-01.lan.homelab -U zabbix -d zabbix -f zabbix_dump.sql

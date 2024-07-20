@@ -38,8 +38,8 @@
 02 - Installing PostgreSQL
   * Change hostname.
   * It is important to set the domain name.
-  sudo hostnamectl set-hostname edge-k3s-db-01.homelab
-  sudo hostnamectl set-hostname edge-postgresql-01.homelab
+  sudo hostnamectl set-hostname edge-k3s-db-01.lan.homelab
+  sudo hostnamectl set-hostname edge-postgresql-01.lan.homelab
 
   sudo nano /etc/hosts
   127.0.1.1 edge-k3s-db-01
